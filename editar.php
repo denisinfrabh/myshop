@@ -13,6 +13,8 @@ if($conn->connect_error){
 die("Erro de Conexão: " . $conn->connect_error);
 }
 
+//criando variaveis dos campos do formulario
+$id = "";
 $name = "";
 $email = "";
 $phone = "";
@@ -21,40 +23,63 @@ $address = "";
 $erroMessage = "";
 $successMessage = "";
 
-if( $_SERVER['REQUEST_METHOD'] == 'POST'){
+if( $_SERVER['REQUEST_METHOD'] == 'GET'){
+    //GET: Metodo para buscar/mostrar a informação do cadastro
+
+    if(!isset($_GET["id"])){
+        header("location: /teste.php");
+        exit;
+    }
+
+    $id = $_GET["id"];
+
+    //Ler a linha especifica do cadastro do cliente
+    $sql = "SELECT * FROM clients WHERE id=$id";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+
+    if(!$row){
+        header("location: /");
+        exit;
+    }
+
+    $name = $row["name"];
+    $email = $row["email"];
+    $phone = $row["phone"];
+    $address = $row["address"];
+}
+else{
+    //POST: Metodo para atualizar a informação do cadastro
+
+    $id = $_POST["id"];
     $name = $_POST["name"];
     $email = $_POST["email"];
     $phone = $_POST["phone"];
     $address = $_POST["address"];
 
-    do{ //checando se os campos estao vazios
-        if(empty($name) || empty($email) || empty($phone) || empty($address)){
+    do{
+        if( empty($id) || empty($name) || empty($email) || empty($phone) || empty($address)){
             $erroMessage = "Todos os campos são obrigatorios";
             break;
         }
 
-        //adicionado cliente
-		$sql = "INSERT INTO clients (name, email, phone, address)" .
-				"VALUES ('$name', '$email', '$phone', '$address')";
-		$result = $conn->query($sql);
-			
-		if(!$result){
-			$erroMessage = "Pesquisa Invalida: " . $conn->error;
-			break;
-		}
-		
-
-        $name = "";
-        $email = "";
-        $phone = "";
-        $address = "";
-
-        $successMessage = "Cliente Adicionado";
+        $sql = "UPDATE clients " . 
+               "SET name = '$name', email = '$email', phone = '$phone', address = '$address' " . 
+               "WHERE id = $id";
         
-        header("location: /index.php");
+        $result = $conn->query($sql);
+
+        if(!$result){
+            $erroMessage = "Pesquisa invalida: " . $conn->error;
+            break;
+        }
+
+        $successMessage = "Cadastro Atualizado com Sucesso!";
+
+        header("location: /");
         exit;
 
-    }while (false);
+    }while(false);
 }
 ?>
 
@@ -63,13 +88,13 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST'){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRIAR - MyShop</title>
+    <title>EDITAR - MyShop</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <div class="container my-5">
-        <h2>Cadastrar Novo Cliente</h2>
+        <h2>Editar informação Cliente</h2>
 		<a class="btn btn-primary" href="/" role="button">Voltar</a>
 		<br>
         <br>
@@ -86,6 +111,7 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST'){
          ?>
 
         <form method="post">
+            <input type="hidden" name="id" value="<?php echo $id; ?>">
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Nome</label>
                 <div class="col-sm-6">
@@ -130,7 +156,7 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST'){
 
             <div class="row mb-3">
                 <div class="offset-sm-3 col-sm-3 d-grid">
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    <button type="submit" class="btn btn-primary">SALVAR</button>
                 </div>
                 <div class="col-sm-3 d-grid">
                     <a class="btn btn-outline-primary" href="/" role="button">Cancelar</a>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyShop</title>
+    <title>INICIO - MyShop</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -61,8 +61,8 @@
                     echo"<td>$row[address]</td>";
                     echo"<td>$row[create_at]</td>";
                     echo"<td>";
-                    echo"<a class='btn btn-primary btn-sm' href='/editar.php?id=$row[id]'>Editar</a> ";
-                    echo"<a class='btn btn-danger btn-sm' href='/apagar.php?id=$row[id]'>Apagar</a>";
+                    echo"<a class='btn btn-primary btn-sm' href='editar.php?id=$row[id]'>Editar</a> ";
+                    echo"<a class='btn btn-danger btn-sm' href='apagar.php?id=$row[id]'>Apagar</a>";
                     echo"</td>";
                 }
                 ?>
