@@ -6,11 +6,11 @@ $db_password = "";
 $db_database = "myshop";
 
 //criando a conexao com o banco
-$conn = new mysqli($db_server,$db_username,$db_password,$db_database);
+$conn = new mysqli($db_server, $db_username, $db_password, $db_database);
 
 //checar a conexao com o banco
-if($conn->connect_error){
-die("Erro de Conexão: " . $conn->connect_error);
+if ($conn->connect_error) {
+    die("Erro de Conexão: " . $conn->connect_error);
 }
 
 //criando variaveis dos campos do formulario
@@ -23,10 +23,10 @@ $address = "";
 $erroMessage = "";
 $successMessage = "";
 
-if( $_SERVER['REQUEST_METHOD'] == 'GET'){
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     //GET: Metodo para buscar/mostrar a informação do cadastro
 
-    if(!isset($_GET["id"])){
+    if (!isset($_GET["id"])) {
         header("location: /teste.php");
         exit;
     }
@@ -38,7 +38,7 @@ if( $_SERVER['REQUEST_METHOD'] == 'GET'){
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
 
-    if(!$row){
+    if (!$row) {
         header("location: /");
         exit;
     }
@@ -47,8 +47,7 @@ if( $_SERVER['REQUEST_METHOD'] == 'GET'){
     $email = $row["email"];
     $phone = $row["phone"];
     $address = $row["address"];
-}
-else{
+} else {
     //POST: Metodo para atualizar a informação do cadastro
 
     $id = $_POST["id"];
@@ -57,19 +56,19 @@ else{
     $phone = $_POST["phone"];
     $address = $_POST["address"];
 
-    do{
-        if( empty($id) || empty($name) || empty($email) || empty($phone) || empty($address)){
+    do {
+        if (empty($id) || empty($name) || empty($email) || empty($phone) || empty($address)) {
             $erroMessage = "Todos os campos são obrigatorios";
             break;
         }
 
-        $sql = "UPDATE clients " . 
-               "SET name = '$name', email = '$email', phone = '$phone', address = '$address' " . 
-               "WHERE id = $id";
-        
+        $sql = "UPDATE clients " .
+            "SET name = '$name', email = '$email', phone = '$phone', address = '$address' " .
+            "WHERE id = $id";
+
         $result = $conn->query($sql);
 
-        if(!$result){
+        if (!$result) {
             $erroMessage = "Pesquisa invalida: " . $conn->error;
             break;
         }
@@ -78,29 +77,30 @@ else{
 
         header("location: /");
         exit;
-
-    }while(false);
+    } while (false);
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDITAR - MyShop</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
     <div class="container my-5">
         <h2>Editar informação Cliente</h2>
-		<a class="btn btn-primary" href="/" role="button">Voltar</a>
-		<br>
+        <a class="btn btn-primary" href="/" role="button">Voltar</a>
+        <br>
         <br>
 
         <?php
-        if(!empty($erroMessage)){
+        if (!empty($erroMessage)) {
             echo "
             <div class='alert alert-warning alert-dismissible fade show' role='alert'>
                 <strong>$erroMessage</strong>
@@ -108,37 +108,37 @@ else{
             </div>
             ";
         }
-         ?>
+        ?>
 
         <form method="post">
             <input type="hidden" name="id" value="<?php echo $id; ?>">
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Nome</label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="name" value="<?php echo $name;?>">
+                    <input type="text" class="form-control" name="name" value="<?php echo $name; ?>">
                 </div>
             </div>
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">E-mail</label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="email" value="<?php echo $email;?>">
+                    <input type="text" class="form-control" name="email" value="<?php echo $email; ?>">
                 </div>
             </div>
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Telefone</label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="phone" value="<?php echo $phone;?>">
+                    <input type="text" class="form-control" name="phone" value="<?php echo $phone; ?>">
                 </div>
             </div>
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Endereço</label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="address" value="<?php echo $address;?>">
+                    <input type="text" class="form-control" name="address" value="<?php echo $address; ?>">
                 </div>
             </div>
 
             <?php
-            if( !empty($successMessage)){
+            if (!empty($successMessage)) {
                 echo "
                 <div class='row-mb-3'>
                     <div class='offset-sm-3 col-sm-6'>
@@ -166,4 +166,5 @@ else{
     </div>
 
 </body>
+
 </html>
