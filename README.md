@@ -1,1 +1,1 @@
-Projeto teste em php e mysql.
+Projeto teste CRUD em php e mysql.
